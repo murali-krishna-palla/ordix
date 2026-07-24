@@ -3,10 +3,10 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 const routes = require("./routes");
-const errorHandler = require("./middlewares/error.middleware");
+const errorHandler = require("./middleware/error.middleware");
 
 // Register Models
-require("./models/User");
+require("./models");
 
 const app = express();
 
@@ -33,10 +33,10 @@ app.use("/api/v1", routes);
 // =====================
 
 app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: "Route not found",
-    });
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  });
 });
 
 // =====================

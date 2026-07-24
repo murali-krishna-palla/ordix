@@ -10,55 +10,92 @@ const User = sequelize.define(
       primaryKey: true,
     },
 
-    full_name: {
-      type: DataTypes.STRING(100),
+    restaurantId: {
+      type: DataTypes.UUID,
       allowNull: false,
+      field: "restaurant_id",
+      references: {
+        model: "restaurants",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [2, 50],
+      },
+      field: "first_name",
+    },
+
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [2, 50],
+      },
+      field: "last_name",
     },
 
     email: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      validate: {
+        isEmail: true,
+        notEmpty: true,
+      },
     },
 
     password: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
     },
 
     phone: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        len: [10, 15],
+      },
+    },
+
+    avatar: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
 
-    role: {
-      type: DataTypes.ENUM(
-        "SUPER_ADMIN",
-        "OWNER",
-        "MANAGER",
-        "WAITER",
-        "CHEF",
-        "CASHIER",
-        "INVENTORY"
-      ),
-      defaultValue: "OWNER",
-      allowNull: false,
-    },
-
     status: {
-      type: DataTypes.ENUM("ACTIVE", "INACTIVE"),
+      type: DataTypes.ENUM(
+        "ACTIVE",
+        "INACTIVE",
+        "SUSPENDED"
+      ),
       defaultValue: "ACTIVE",
     },
 
-    is_verified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
+    lastLogin: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: "last_login",
     },
   },
   {
     tableName: "users",
     timestamps: true,
+    paranoid: true,
     underscored: true,
+
+    indexes: [
+      {
+        unique: true,
+        fields: ["restaurant_id", "email"],
+      },
+    ],
   }
 );
 

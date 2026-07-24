@@ -1,29 +1,34 @@
-const dotenv = require("dotenv");
-
-dotenv.config();
+require("dotenv").config();
 
 const app = require("./app");
+
 const sequelize = require("./config/database");
+const seedPermissions = require("./seeders/permissionSeeder");
 
 const PORT = process.env.PORT || 5000;
 
-(async () => {
-    try {
-        await sequelize.authenticate();
-        console.log("✅ Database connected successfully.");
+const startServer = async () => {
+  try {
+    // Database Connection
+    await sequelize.authenticate();
+    console.log("✅ Database Connected");
 
-        await sequelize.sync();
-        console.log("✅ Database synced successfully.");
+    // Sync Database
+    await sequelize.sync({ alter: true });
+    console.log("✅ Database Synced");
 
-        app.listen(PORT, () => {
-            console.log(`🚀 Server running on http://localhost:${PORT}`);
-        });
+    // Seed Permissions
+    await seedPermissions();
 
-    } catch (error) {
+    // Start Server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Server Startup Failed");
+    console.error(error);
+    process.exit(1);
+  }
+};
 
-        console.error("❌ Failed to start server");
-
-        console.error(error);
-
-    }
-})();
+startServer();
