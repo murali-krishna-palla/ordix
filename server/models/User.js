@@ -2,101 +2,87 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const User = sequelize.define(
-  "User",
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
+    "User",
+    {
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
+        },
 
-    restaurantId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      field: "restaurant_id",
-      references: {
-        model: "restaurants",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
+        restaurantId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
 
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [2, 50],
-      },
-      field: "first_name",
-    },
+        firstName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
 
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [2, 50],
-      },
-      field: "last_name",
-    },
+        lastName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
 
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        isEmail: true,
-        notEmpty: true,
-      },
-    },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: true,
+            },
+        },
 
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: true, // Allows Google-authenticated users if needed in the future
+        },
 
-    phone: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        len: [10, 15],
-      },
-    },
+        phone: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
 
-    avatar: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+        googleId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            unique: true,
+        },
 
-    status: {
-      type: DataTypes.ENUM(
-        "ACTIVE",
-        "INACTIVE",
-        "SUSPENDED"
-      ),
-      defaultValue: "ACTIVE",
-    },
+        provider: {
+            type: DataTypes.ENUM("LOCAL", "GOOGLE"),
+            allowNull: false,
+            defaultValue: "LOCAL",
+        },
 
-    lastLogin: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      field: "last_login",
-    },
-  },
-  {
-    tableName: "users",
-    timestamps: true,
-    paranoid: true,
-    underscored: true,
+        // Password Reset Fields
+        resetPasswordToken: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
 
-    indexes: [
-      {
-        unique: true,
-        fields: ["restaurant_id", "email"],
-      },
-    ],
-  }
+        resetPasswordExpires: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+
+        isActive: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+        },
+
+        lastLogin: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+    },
+    {
+        tableName: "users",
+        timestamps: true,
+        paranoid: true,
+        underscored: true,
+    }
 );
 
 module.exports = User;
