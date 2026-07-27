@@ -30,7 +30,7 @@ const authenticate = async (req, res, next) => {
     }
 
     // Check Account Status
-    if (user.status !== "ACTIVE") {
+    if (!user.isActive) {
       return res.status(403).json({
         success: false,
         message: "Your account is inactive.",

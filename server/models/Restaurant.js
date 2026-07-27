@@ -10,6 +10,10 @@ const Restaurant = sequelize.define(
       primaryKey: true,
     },
 
+    // ==========================
+    // Basic Information
+    // ==========================
+
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -17,6 +21,11 @@ const Restaurant = sequelize.define(
         notEmpty: true,
         len: [2, 100],
       },
+    },
+
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
 
     email: {
@@ -38,6 +47,46 @@ const Restaurant = sequelize.define(
         len: [10, 15],
       },
     },
+
+    website: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
+
+    // ==========================
+    // Branding
+    // ==========================
+
+    logo: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    banner: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    // ==========================
+    // Legal Information
+    // ==========================
+
+    gstNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    fssaiNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    // ==========================
+    // Address
+    // ==========================
 
     address: {
       type: DataTypes.TEXT,
@@ -71,6 +120,15 @@ const Restaurant = sequelize.define(
       defaultValue: "India",
     },
 
+    postalCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    // ==========================
+    // Business Settings
+    // ==========================
+
     timezone: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -83,10 +141,46 @@ const Restaurant = sequelize.define(
       defaultValue: "INR",
     },
 
-    logo: {
+    language: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "English",
+    },
+
+    taxPercentage: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: false,
+      defaultValue: 0,
+    },
+
+    serviceCharge: {
+      type: DataTypes.DECIMAL(5, 2),
+      allowNull: false,
+      defaultValue: 0,
+    },
+
+    // ==========================
+    // Social Media
+    // ==========================
+
+    facebook: {
       type: DataTypes.STRING,
       allowNull: true,
     },
+
+    instagram: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    twitter: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    // ==========================
+    // Subscription
+    // ==========================
 
     subscriptionPlan: {
       type: DataTypes.ENUM("FREE", "PRO", "ENTERPRISE"),
@@ -94,8 +188,16 @@ const Restaurant = sequelize.define(
       defaultValue: "FREE",
     },
 
+    // ==========================
+    // Restaurant Status
+    // ==========================
+
     status: {
-      type: DataTypes.ENUM("ACTIVE", "INACTIVE", "SUSPENDED"),
+      type: DataTypes.ENUM(
+        "ACTIVE",
+        "TEMPORARILY_CLOSED",
+        "PERMANENTLY_CLOSED"
+      ),
       allowNull: false,
       defaultValue: "ACTIVE",
     },

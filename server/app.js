@@ -1,11 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const passport = require("./config/passport");
 
 const routes = require("./routes");
+const errorHandler = require("./middleware/error.middleware");
 
-const errorHandler = require("./middleware/error.middleware");// Register Models
-const passport = require("./config/passport");
+// Register Models
 require("./models");
 
 const app = express();
@@ -14,17 +15,28 @@ const app = express();
 // Middlewares
 // =====================
 
-app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(passport.initialize());
 
-app.use(cookieParser());
+// =====================
+// Static Files
+// =====================
+
+app.use("/uploads", express.static("uploads"));
 
 // =====================
-// Routes
+// API Routes
 // =====================
 
 app.use("/api/v1", routes);

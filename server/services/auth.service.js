@@ -20,6 +20,7 @@ class AuthService {
     const transaction = await sequelize.transaction();
 
     try {
+      console.log("\n========== REGISTRATION START ==========");
       const { restaurant, owner } = data;
 
       // Check if restaurant email already exists
@@ -32,6 +33,7 @@ class AuthService {
       if (existingRestaurant) {
         throw new Error("Restaurant email already exists.");
       }
+      console.log("✅ Restaurant email unique");
 
       // Check if owner email already exists
       const existingUser = await User.findOne({
@@ -43,6 +45,7 @@ class AuthService {
       if (existingUser) {
         throw new Error("Owner email already exists.");
       }
+      console.log("✅ Owner email unique");
 
       // Create Restaurant
       const createdRestaurant = await Restaurant.create(
@@ -56,9 +59,11 @@ class AuthService {
         },
         { transaction }
       );
+      console.log("✅ Restaurant created:", createdRestaurant.id);
 
       // Hash Password
       const hashedPassword = await hashPassword(owner.password);
+      console.log("✅ Password hashed");
 
       // Create Owner User
       const createdUser = await User.create(
@@ -69,15 +74,18 @@ class AuthService {
           email: owner.email,
           password: hashedPassword,
           phone: owner.phone,
+          provider: "LOCAL",
         },
         { transaction }
       );
+      console.log("✅ User created:", createdUser.id);
 
       // Create Default Roles
       await roleService.createDefaultRoles(
         createdRestaurant.id,
         transaction
       );
+      console.log("✅ Default roles created");
 
       // Get OWNER Role
       const ownerRole = await roleService.getRoleByName(
@@ -85,6 +93,7 @@ class AuthService {
         "OWNER",
         transaction
       );
+      console.log("✅ Owner role retrieved");
 
       // Assign OWNER Role
       await UserRole.create(
@@ -94,19 +103,24 @@ class AuthService {
         },
         { transaction }
       );
+      console.log("✅ Owner role assigned");
 
       // Generate JWT
       const token = generateToken({
         userId: createdUser.id,
         restaurantId: createdRestaurant.id,
       });
+      console.log("✅ JWT generated");
 
       // Commit Transaction
       await transaction.commit();
+      console.log("✅ Transaction committed");
 
       // Remove Password
       const user = createdUser.toJSON();
       delete user.password;
+
+      console.log("========== REGISTRATION SUCCESS ==========\n");
 
       return {
         message: "Restaurant and Owner created successfully.",
@@ -115,6 +129,8 @@ class AuthService {
         user,
       };
     } catch (error) {
+      console.log("❌ REGISTRATION FAILED:", error.message);
+      console.log("========== REGISTRATION ROLLBACK ==========\n");
       await transaction.rollback();
       throw error;
     }
@@ -146,7 +162,7 @@ class AuthService {
 
     // Check Account Status
     if (!user.isActive) {
-      throw new Error("Your account is inactive.");
+      throw new Error("Your account is not active. Please contact support.");
     }
 
     // Update Last Login

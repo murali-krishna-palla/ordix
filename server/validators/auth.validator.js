@@ -14,7 +14,9 @@ const registerOwnerValidator = [
   body("restaurant.phone")
     .trim()
     .notEmpty()
-    .withMessage("Restaurant phone is required"),
+    .withMessage("Restaurant phone is required")
+    .isLength({ min: 10, max: 10 })
+    .withMessage("Restaurant phone must be 10 digits"),
 
   body("restaurant.address")
     .trim()

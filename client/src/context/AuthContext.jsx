@@ -1,31 +1,66 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import authService from "../services/auth.service";
+import { TOKEN_KEY } from "../constants";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(
-    localStorage.getItem("token") || null
-  );
+  const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || null);
   const [loading, setLoading] = useState(true);
 
+  // On first load, if a token exists, hydrate the user from /auth/me.
   useEffect(() => {
-    if (token) {
-      setUser({});
-    }
-    setLoading(false);
-  }, [token]);
+    const hydrate = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
-  const login = (userData, jwtToken) => {
-    localStorage.setItem("token", jwtToken);
+      try {
+        const me = await authService.getMe();
+        setUser(me);
+      } catch (error) {
+        localStorage.removeItem(TOKEN_KEY);
+        setToken(null);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    hydrate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const persistSession = (userData, jwtToken) => {
+    localStorage.setItem(TOKEN_KEY, jwtToken);
     setUser(userData);
     setToken(jwtToken);
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    setToken(null);
+  const login = async (credentials) => {
+    const result = await authService.login(credentials);
+    persistSession(result.user, result.token);
+    return result;
+  };
+
+  const registerOwner = async (payload) => {
+    const result = await authService.registerOwner(payload);
+    persistSession(result.user, result.token);
+    return result;
+  };
+
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch {
+      // Even if the API call fails, clear the local session.
+    } finally {
+      localStorage.removeItem(TOKEN_KEY);
+      setUser(null);
+      setToken(null);
+    }
   };
 
   return (
@@ -35,7 +70,9 @@ export const AuthProvider = ({ children }) => {
         token,
         loading,
         login,
+        registerOwner,
         logout,
+        setSession: persistSession,
         isAuthenticated: !!token,
       }}
     >

@@ -13,6 +13,9 @@ const { hashPassword } = require("../utils/password");
 // ==============================
 const register = async (req, res, next) => {
   try {
+    console.log("\n========== REGISTER ENDPOINT HIT ==========");
+    console.log("Request body received");
+    
     const result = await authService.register(req.body);
 
     res.status(201).json({
@@ -25,6 +28,7 @@ const register = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error("❌ Register error:", error);
     next(error);
   }
 };
@@ -61,14 +65,9 @@ const googleCallback = async (req, res, next) => {
       restaurantId: user.restaurantId,
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Google login successful.",
-      data: {
-        token,
-        user,
-      },
-    });
+    // Redirect to frontend with token as query parameter
+    const frontendCallbackUrl = process.env.FRONTEND_CALLBACK_URL || "http://localhost:5173/auth/google/callback";
+    res.redirect(`${frontendCallbackUrl}?token=${token}`);
   } catch (error) {
     next(error);
   }
