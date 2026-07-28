@@ -1,10 +1,12 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   FiGrid,
+  FiHome,
   FiUsers,
   FiClipboard,
+  FiSettings,
   FiLogOut,
   FiMenu,
   FiChevronDown,
@@ -12,11 +14,14 @@ import {
 
 import Logo from "../components/common/Logo";
 import useAuth from "../hooks/useAuth";
+import restaurantService from "../services/restaurant.service";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Overview", icon: FiGrid, end: true },
+  { to: "/dashboard/hotel", label: "Hotel", icon: FiHome },
   { to: "/dashboard/staff", label: "Staff", icon: FiUsers },
   { to: "/dashboard/customers", label: "Customers", icon: FiClipboard },
+  { to: "/dashboard/settings", label: "Settings", icon: FiSettings },
 ];
 
 const navLinkClass = ({ isActive }) =>
@@ -30,6 +35,26 @@ const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [restaurantName, setRestaurantName] = useState(null);
+
+  // The auth payload doesn't carry the restaurant relation, so pull the
+  // name from the dedicated profile endpoint for the topbar.
+  useEffect(() => {
+    let cancelled = false;
+
+    restaurantService
+      .getProfile()
+      .then((data) => {
+        if (!cancelled) setRestaurantName(data.name);
+      })
+      .catch(() => {
+        // Non-critical — the topbar just falls back to a generic label.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -96,9 +121,9 @@ const DashboardLayout = () => {
           </button>
 
           <div className="hidden lg:block">
-            <p className="text-sm text-muted">
-              {user?.Restaurant?.name || "Your restaurant"}
-            </p>
+            <Link to="/dashboard/hotel" className="text-sm text-muted hover:text-ink">
+              {restaurantName || "Your restaurant"}
+            </Link>
           </div>
 
           <div className="flex items-center gap-2 text-sm font-medium text-ink">

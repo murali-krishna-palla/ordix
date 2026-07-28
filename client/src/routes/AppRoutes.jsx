@@ -10,8 +10,10 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import GoogleCallback from "../pages/auth/GoogleCallback";
 
 import Dashboard from "../pages/dashboard/Dashboard";
+import HotelOverview from "../pages/hotel/HotelOverview";
 import Staff from "../pages/staff/Staff";
 import Customers from "../pages/customers/Customers";
+import Settings from "../pages/settings/Settings";
 import NotFound from "../pages/misc/NotFound";
 
 import ProtectedRoute from "./ProtectedRoute";
@@ -46,8 +48,10 @@ const AppRoutes = () => {
         }
       >
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/hotel" element={<HotelOverview />} />
         <Route path="/dashboard/staff" element={<Staff />} />
         <Route path="/dashboard/customers" element={<Customers />} />
+        <Route path="/dashboard/settings" element={<Settings />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
