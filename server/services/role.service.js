@@ -8,6 +8,12 @@ class RoleService {
     const roles = [
       {
         restaurantId,
+        name: "RESTAURANT_ADMIN",
+        description: "Restaurant Administrator (Primary Owner Account)",
+        isDefault: false,
+      },
+      {
+        restaurantId,
         name: "OWNER",
         description: "Restaurant Owner",
         isDefault: false,

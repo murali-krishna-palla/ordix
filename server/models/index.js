@@ -6,18 +6,25 @@ const Role = require("./Role");
 const Permission = require("./Permission");
 const UserRole = require("./UserRole");
 const RolePermission = require("./RolePermission");
+const RestaurantRegistrationRequest = require("./RestaurantRegistrationRequest");
 
 /* =====================================================
    Restaurant <-> User
 ===================================================== */
 
 Restaurant.hasMany(User, {
-  foreignKey: "restaurantId",
+  foreignKey: {
+    name: "restaurantId",
+    allowNull: true,
+  },
   as: "users",
 });
 
 User.belongsTo(Restaurant, {
-  foreignKey: "restaurantId",
+  foreignKey: {
+    name: "restaurantId",
+    allowNull: true,
+  },
   as: "restaurant",
 });
 
@@ -71,6 +78,15 @@ Permission.belongsToMany(Role, {
   as: "roles",
 });
 
+/* =====================================================
+   RestaurantRegistrationRequest <-> User (approver)
+===================================================== */
+
+RestaurantRegistrationRequest.belongsTo(User, {
+  foreignKey: "approvedBy",
+  as: "approver",
+});
+
 module.exports = {
   sequelize,
   Restaurant,
@@ -79,4 +95,5 @@ module.exports = {
   Permission,
   UserRole,
   RolePermission,
+  RestaurantRegistrationRequest,
 };

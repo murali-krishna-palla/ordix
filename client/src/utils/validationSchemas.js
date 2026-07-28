@@ -91,6 +91,15 @@ export const businessSettingsSchema = z.object({
   serviceCharge: z.coerce.number().min(0).max(100, "Must be between 0 and 100"),
 });
 
+// Used by the Super Admin "Reject registration request" modal.
+export const rejectReasonSchema = z.object({
+  reason: z
+    .string()
+    .trim()
+    .min(5, "Please provide a reason (at least 5 characters)")
+    .max(500, "Keep it under 500 characters"),
+});
+
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, "Current password is required"),

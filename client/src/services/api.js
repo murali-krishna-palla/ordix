@@ -26,9 +26,14 @@ api.interceptors.response.use(
       error.response?.data?.errors?.[0]?.msg ||
       "Something went wrong. Please try again.";
 
+    // Some flows (e.g. login while a registration request is still pending)
+    // need a machine-readable code, not just the human message, to branch on.
+    const code = error.response?.data?.code;
+
     return Promise.reject({
       ...error,
       message,
+      code,
       status: error.response?.status,
     });
   }

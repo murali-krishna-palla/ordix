@@ -46,6 +46,16 @@ router.post(
 );
 
 // ==============================
+// Super Admin Login
+// ==============================
+router.post(
+  "/super-admin/login",
+  loginValidator,
+  validate,
+  authController.login
+);
+
+// ==============================
 // Google Login
 // ==============================
 router.get(
@@ -78,6 +88,12 @@ router.get(
   authController.getMe
 );
 
+router.get(
+  "/super-admin/me",
+  authenticate,
+  authController.getMe
+);
+
 // ==============================
 // Change Password
 // ==============================
@@ -92,6 +108,12 @@ router.patch(
 // ==============================
 router.post(
   "/logout",
+  authenticate,
+  authController.logout
+);
+
+router.post(
+  "/super-admin/logout",
   authenticate,
   authController.logout
 );

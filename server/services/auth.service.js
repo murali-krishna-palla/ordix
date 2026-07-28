@@ -1,139 +1,37 @@
 const bcrypt = require("bcrypt");
-const {
-  sequelize,
-  Restaurant,
-  User,
-  UserRole,
-} = require("../models");
+const { User } = require("../models");
 
-const roleService = require("./role.service");
-
-const {
-  hashPassword,
-  comparePassword,
-} = require("../utils/password");
+const { comparePassword } = require("../utils/password");
 
 const { generateToken } = require("../utils/jwt");
+const registrationRequestService = require("./registrationRequest.service");
 
 class AuthService {
+  // NOTE: Restaurant Owners are no longer created directly here.
+  // Registration now creates a PENDING RestaurantRegistrationRequest and
+  // waits for Super Admin approval before any Restaurant/User is created.
+  // See registrationRequest.service.js for the approval workflow, and
+  // auth.controller.js / registrationRequest.controller.js for the routes.
   async register(data) {
-    const transaction = await sequelize.transaction();
+    const { restaurant = {}, owner = {} } = data;
 
-    try {
-      console.log("\n========== REGISTRATION START ==========");
-      const { restaurant, owner } = data;
+    const ownerName = [owner.firstName, owner.lastName]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
 
-      // Check if restaurant email already exists
-      const existingRestaurant = await Restaurant.findOne({
-        where: {
-          email: restaurant.email,
-        },
-      });
-
-      if (existingRestaurant) {
-        throw new Error("Restaurant email already exists.");
-      }
-      console.log("✅ Restaurant email unique");
-
-      // Check if owner email already exists
-      const existingUser = await User.findOne({
-        where: {
-          email: owner.email,
-        },
-      });
-
-      if (existingUser) {
-        throw new Error("Owner email already exists.");
-      }
-      console.log("✅ Owner email unique");
-
-      // Create Restaurant
-      const createdRestaurant = await Restaurant.create(
-        {
-          name: restaurant.name,
-          email: restaurant.email,
-          phone: restaurant.phone,
-          address: restaurant.address,
-          city: restaurant.city,
-          state: restaurant.state,
-        },
-        { transaction }
-      );
-      console.log("✅ Restaurant created:", createdRestaurant.id);
-
-      // Hash Password
-      const hashedPassword = await hashPassword(owner.password);
-      console.log("✅ Password hashed");
-
-      // Create Owner User
-      const createdUser = await User.create(
-        {
-          restaurantId: createdRestaurant.id,
-          firstName: owner.firstName,
-          lastName: owner.lastName,
-          email: owner.email,
-          password: hashedPassword,
-          phone: owner.phone,
-          provider: "LOCAL",
-        },
-        { transaction }
-      );
-      console.log("✅ User created:", createdUser.id);
-
-      // Create Default Roles
-      await roleService.createDefaultRoles(
-        createdRestaurant.id,
-        transaction
-      );
-      console.log("✅ Default roles created");
-
-      // Get OWNER Role
-      const ownerRole = await roleService.getRoleByName(
-        createdRestaurant.id,
-        "OWNER",
-        transaction
-      );
-      console.log("✅ Owner role retrieved");
-
-      // Assign OWNER Role
-      await UserRole.create(
-        {
-          userId: createdUser.id,
-          roleId: ownerRole.id,
-        },
-        { transaction }
-      );
-      console.log("✅ Owner role assigned");
-
-      // Generate JWT
-      const token = generateToken({
-        userId: createdUser.id,
-        restaurantId: createdRestaurant.id,
-      });
-      console.log("✅ JWT generated");
-
-      // Commit Transaction
-      await transaction.commit();
-      console.log("✅ Transaction committed");
-
-      // Remove Password
-      const user = createdUser.toJSON();
-      delete user.password;
-
-      console.log("========== REGISTRATION SUCCESS ==========\n");
-
-      return {
-        message: "Restaurant and Owner created successfully.",
-        token,
-        restaurant: createdRestaurant,
-        user,
-      };
-    } catch (error) {
-      console.log("❌ REGISTRATION FAILED:", error.message);
-      console.log("========== REGISTRATION ROLLBACK ==========\n");
-      await transaction.rollback();
-      throw error;
-    }
+    return await registrationRequestService.registerRequest({
+      restaurantName: restaurant.name,
+      ownerName: ownerName || owner.email,
+      email: owner.email,
+      phone: owner.phone,
+      password: owner.password,
+      address: restaurant.address,
+      city: restaurant.city,
+      state: restaurant.state,
+      country: restaurant.country,
+      postalCode: restaurant.postalCode,
+    });
   }
 
   async login(data) {

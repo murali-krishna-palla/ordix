@@ -7,6 +7,7 @@ const VARIANTS = {
   secondary:
     "bg-white text-ink border border-line hover:bg-canvas",
   ghost: "bg-transparent text-ink-soft hover:bg-canvas",
+  danger: "bg-danger text-white hover:bg-danger/90 disabled:hover:bg-danger",
 };
 
 const Button = ({

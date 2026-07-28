@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { FiArrowLeft, FiArrowRight, FiCheck } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiCheck, FiClock } from "react-icons/fi";
 
 import FormField from "../../components/ui/FormField";
 import Button from "../../components/ui/Button";
-import useAuth from "../../hooks/useAuth";
+import registrationRequestService from "../../services/registrationRequestService";
 import { registerSchema } from "../../utils/validationSchemas";
 
 const STEPS = [
@@ -18,9 +18,8 @@ const STEPS = [
 const RESTAURANT_FIELDS = ["name", "email", "phone", "address", "city", "state"];
 
 const Register = () => {
-  const navigate = useNavigate();
-  const { registerOwner } = useAuth();
   const [step, setStep] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
 
   const {
     register,
@@ -50,13 +49,45 @@ const Register = () => {
   const onSubmit = async (values) => {
     try {
       const { confirmPassword: _confirmPassword, ...owner } = values.owner;
-      await registerOwner({ restaurant: values.restaurant, owner });
-      toast.success("Restaurant created — welcome to ORDIX!");
-      navigate("/dashboard", { replace: true });
+      // Does NOT log the user in — the account stays pending until a
+      // Super Admin reviews and approves it.
+      await registrationRequestService.submitRegistration({
+        restaurant: values.restaurant,
+        owner,
+      });
+      toast.success("Registration request submitted!");
+      setSubmitted(true);
     } catch (error) {
-      toast.error(error.message || "Unable to create your account.");
+      toast.error(error.message || "Unable to submit your registration.");
     }
   };
+
+  if (submitted) {
+    return (
+      <div className="text-center">
+        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-brand-600">
+          <FiClock size={22} />
+        </span>
+        <h1 className="mt-4 text-2xl font-bold text-ink">
+          Registration Request Submitted
+        </h1>
+        <p className="mt-2 text-[15px] text-muted">
+          Your registration request has been submitted successfully.
+        </p>
+        <p className="mt-1.5 text-[15px] text-muted">
+          Please wait until the Super Admin reviews and approves your request.
+          You will be able to log in once your request has been approved.
+        </p>
+
+        <Link to="/login" className="mt-6 inline-block w-full">
+          <Button>
+            <FiArrowLeft size={16} />
+            Back to Login
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div>

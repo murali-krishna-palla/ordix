@@ -15,17 +15,17 @@ const register = async (req, res, next) => {
   try {
     console.log("\n========== REGISTER ENDPOINT HIT ==========");
     console.log("Request body received");
-    
+
+    // Registration no longer creates an active account. authService.register
+    // now adapts this endpoint's payload shape and forwards it to the
+    // Registration Request Service, creating a PENDING request that awaits
+    // Super Admin approval.
     const result = await authService.register(req.body);
 
     res.status(201).json({
       success: true,
       message: result.message,
-      data: {
-        token: result.token,
-        restaurant: result.restaurant,
-        user: result.user,
-      },
+      data: result.request,
     });
   } catch (error) {
     console.error("❌ Register error:", error);

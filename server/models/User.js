@@ -12,7 +12,16 @@ const User = sequelize.define(
 
         restaurantId: {
             type: DataTypes.UUID,
+            field: "restaurant_id",
+            allowNull: true, // Nullable: SUPER_ADMIN users are not tied to a restaurant
+        },
+
+        // Distinguishes platform-level Super Admin accounts from
+        // regular restaurant-scoped accounts (Owner/Manager/Staff).
+        userType: {
+            type: DataTypes.ENUM("RESTAURANT_USER", "SUPER_ADMIN"),
             allowNull: false,
+            defaultValue: "RESTAURANT_USER",
         },
 
         firstName: {

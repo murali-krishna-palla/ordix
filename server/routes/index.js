@@ -3,6 +3,7 @@ const router = express.Router();
 
 const authRoutes = require("./auth.routes");
 const restaurantRoutes = require("./restaurant.routes");
+const registrationRequestRoutes = require("./registrationRequest.routes");
 
 router.get("/health", (req, res) => {
   res.json({
@@ -13,5 +14,6 @@ router.get("/health", (req, res) => {
 
 router.use("/auth", authRoutes);
 router.use("/restaurants", restaurantRoutes);
+router.use("/registration-requests", registrationRequestRoutes);
 
 module.exports = router;
