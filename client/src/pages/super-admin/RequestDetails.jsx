@@ -118,7 +118,7 @@ const RequestDetails = () => {
         Back to requests
       </button>
 
-      <div className="mt-4 rounded-xl border border-line bg-surface p-6">
+      <div className="mt-4 card p-6">
         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-xl font-bold text-ink">{getRestaurantName(request)}</h1>
@@ -139,7 +139,7 @@ const RequestDetails = () => {
         </dl>
 
         {status === REGISTRATION_STATUS.REJECTED && request.rejectionReason && (
-          <div className="mt-6 rounded-lg border border-danger/30 bg-danger/5 p-4">
+          <div className="mt-6 rounded-lg border border-danger/20 bg-danger-soft p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-danger">
               Rejection reason
             </p>

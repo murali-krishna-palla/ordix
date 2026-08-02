@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
+import { FiGlobe, FiCreditCard } from "react-icons/fi";
 import FormField from "../../components/ui/FormField";
 import Select from "../../components/ui/Select";
 import Button from "../../components/ui/Button";
@@ -38,10 +39,15 @@ const BusinessTab = ({ restaurant, onSaved }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <section>
-        <h2 className="font-display text-base font-semibold text-ink">
-          Locale
-        </h2>
-        <p className="mt-0.5 text-sm text-muted">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+            <FiGlobe size={15} />
+          </span>
+          <h2 className="font-display text-base font-semibold text-ink">
+            Locale
+          </h2>
+        </div>
+        <p className="mt-0.5 pl-[42px] text-sm text-muted">
           Controls how currency, dates, and menus are displayed.
         </p>
 
@@ -72,11 +78,16 @@ const BusinessTab = ({ restaurant, onSaved }) => {
         </div>
       </section>
 
-      <section>
-        <h2 className="font-display text-base font-semibold text-ink">
-          Billing
-        </h2>
-        <p className="mt-0.5 text-sm text-muted">
+      <section className="border-t border-line-soft pt-8">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+            <FiCreditCard size={15} />
+          </span>
+          <h2 className="font-display text-base font-semibold text-ink">
+            Billing
+          </h2>
+        </div>
+        <p className="mt-0.5 pl-[42px] text-sm text-muted">
           Applied automatically to every order at checkout.
         </p>
 
@@ -102,7 +113,7 @@ const BusinessTab = ({ restaurant, onSaved }) => {
         </div>
       </section>
 
-      <div className="flex justify-end border-t border-line pt-5">
+      <div className="flex justify-end border-t border-line-soft pt-5">
         <Button type="submit" loading={isSubmitting} disabled={!isDirty} className="w-auto px-6">
           Save changes
         </Button>

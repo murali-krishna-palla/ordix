@@ -7,23 +7,34 @@
   --color-ink: #14111c;
   --color-ink-soft: #4a4557;
   --color-muted: #837c92;
+  --color-faint: #b3adc0;
   --color-line: #e7e3ef;
+  --color-line-soft: #f0edf6;
   --color-surface: #ffffff;
   --color-canvas: #faf9fc;
+  --color-canvas-alt: #f4f1fb;
 
   --color-brand-50: #f5eeff;
   --color-brand-100: #ead9ff;
   --color-brand-200: #d6b4ff;
+  --color-brand-300: #c088fb;
   --color-brand-400: #a855f7;
   --color-brand-500: #8b2fe0;
   --color-brand-600: #7318c2;
   --color-brand-700: #5a129a;
+  --color-brand-900: #2c0a4d;
 
   --color-ember-400: #fb923c;
   --color-ember-500: #f2740c;
 
   --color-success: #17915a;
+  --color-success-soft: #e7f7ef;
   --color-danger: #d92d3b;
+  --color-danger-soft: #fdedee;
+
+  --shadow-card: 0 1px 2px rgba(20, 17, 28, 0.04), 0 8px 24px -12px rgba(20, 17, 28, 0.10);
+  --shadow-card-hover: 0 2px 4px rgba(20, 17, 28, 0.05), 0 16px 32px -14px rgba(20, 17, 28, 0.16);
+  --shadow-pop: 0 24px 48px -16px rgba(44, 10, 77, 0.28);
 }
 
 html {
@@ -42,6 +53,21 @@ h1, h2, h3, h4 {
   letter-spacing: -0.02em;
 }
 
+/* Elevated surface used for cards throughout the dashboard — a softer,
+   more deliberate alternative to a flat border. */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-hover:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-line-soft);
+}
+
 /* Receipt-style perforated divider — nods to a kitchen order ticket */
 .ticket-edge {
   position: relative;
@@ -56,6 +82,25 @@ h1, h2, h3, h4 {
   background-image: linear-gradient(to right, var(--color-brand-200) 50%, transparent 0%);
   background-size: 10px 1px;
   background-repeat: repeat-x;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 999px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.35s ease both;
 }
 
 ::selection {

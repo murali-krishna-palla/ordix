@@ -2,9 +2,10 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models");
 
 const { comparePassword } = require("../utils/password");
-
 const { generateToken } = require("../utils/jwt");
 const registrationRequestService = require("./registrationRequest.service");
+const registrationRequestRepository = require("../repositories/registrationRequest.repository");
+const ApiError = require("../utils/ApiError");
 
 class AuthService {
   // NOTE: Restaurant Owners are no longer created directly here.
@@ -22,6 +23,8 @@ class AuthService {
 
     return await registrationRequestService.registerRequest({
       restaurantName: restaurant.name,
+      restaurantEmail: restaurant.email,
+      restaurantPhone: restaurant.phone,
       ownerName: ownerName || owner.email,
       email: owner.email,
       phone: owner.phone,
@@ -34,7 +37,7 @@ class AuthService {
     });
   }
 
-  async login(data) {
+  async login(data, requireSuperAdmin = false) {
     const { email, password } = data;
 
     // Find User
@@ -45,22 +48,39 @@ class AuthService {
     });
 
     if (!user) {
-      throw new Error("Invalid email or password.");
+      const pendingRequest = await registrationRequestRepository.findPendingByEmail(
+        email
+      );
+
+      if (pendingRequest) {
+        throw new ApiError(
+          403,
+          "Your registration is still pending approval.",
+          "PENDING_APPROVAL"
+        );
+      }
+
+      throw new ApiError(401, "Invalid email or password.", "INVALID_CREDENTIALS");
+    }
+
+    if (requireSuperAdmin && user.userType !== "SUPER_ADMIN") {
+      throw new ApiError(403, "Access denied.", "NOT_SUPER_ADMIN");
     }
 
     // Check Password
-    const isPasswordValid = await comparePassword(
-      password,
-      user.password
-    );
+    const isPasswordValid = await comparePassword(password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error("Invalid email or password.");
+      throw new ApiError(401, "Invalid email or password.", "INVALID_CREDENTIALS");
     }
 
     // Check Account Status
     if (!user.isActive) {
-      throw new Error("Your account is not active. Please contact support.");
+      throw new ApiError(
+        403,
+        "Your account is not active. Please contact support.",
+        "ACCOUNT_INACTIVE"
+      );
     }
 
     // Update Last Login

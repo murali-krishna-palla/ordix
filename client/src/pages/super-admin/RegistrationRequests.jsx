@@ -102,8 +102,8 @@ const RegistrationRequests = () => {
               onClick={() => setFilter(key)}
               className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition ${
                 filter === key
-                  ? "bg-ink text-white"
-                  : "border border-line bg-surface text-ink-soft hover:bg-canvas"
+                  ? "bg-ink text-white shadow-sm"
+                  : "border border-line bg-surface text-ink-soft hover:bg-canvas-alt"
               }`}
             >
               {label}
@@ -112,11 +112,11 @@ const RegistrationRequests = () => {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-line bg-surface">
+      <div className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
-              <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-muted">
+              <tr className="border-b border-line bg-canvas-alt/60 text-xs font-semibold uppercase tracking-wide text-muted">
                 <th className="px-5 py-3">Restaurant</th>
                 <th className="px-5 py-3">Owner</th>
                 <th className="px-5 py-3">Email</th>
@@ -150,7 +150,7 @@ const RegistrationRequests = () => {
                   const isBusy = busyId === id;
 
                   return (
-                    <tr key={id} className="text-ink-soft">
+                    <tr key={id} className="text-ink-soft transition hover:bg-canvas-alt/50">
                       <td className="px-5 py-3.5 font-medium text-ink">
                         {getRestaurantName(request)}
                       </td>

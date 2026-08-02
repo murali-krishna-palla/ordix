@@ -21,10 +21,16 @@ const errorHandler = (err, req, res, next) => {
 
   // Custom API errors
   if (err instanceof ApiError) {
-    return res.status(err.statusCode).json({
+    const errorPayload = {
       success: false,
       message: err.message,
-    });
+    };
+
+    if (err.code) {
+      errorPayload.code = err.code;
+    }
+
+    return res.status(err.statusCode).json(errorPayload);
   }
 
   // Sequelize validation errors

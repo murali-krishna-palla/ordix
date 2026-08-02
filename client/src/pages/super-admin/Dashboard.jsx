@@ -69,7 +69,7 @@ const SuperAdminDashboard = () => {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {CARDS.map(({ label, value, icon: Icon, accent }) => (
-          <div key={label} className="rounded-xl border border-line bg-surface p-5">
+          <div key={label} className="card card-hover p-5">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-muted">{label}</span>
               <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${accent}`}>
@@ -83,7 +83,7 @@ const SuperAdminDashboard = () => {
         ))}
       </div>
 
-      <div className="mt-6 rounded-xl border border-dashed border-line bg-surface p-8 text-center">
+      <div className="mt-6 card p-8 text-center">
         <p className="font-display text-lg font-semibold text-ink">
           Review pending registrations
         </p>

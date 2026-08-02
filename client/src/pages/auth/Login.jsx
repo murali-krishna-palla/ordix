@@ -61,7 +61,7 @@ const Login = () => {
       </p>
 
       {pendingApproval && (
-        <div className="mt-6 flex gap-3 rounded-lg border border-ember-400/30 bg-ember-400/10 p-4">
+        <div className="animate-fade-in mt-6 flex gap-3 rounded-lg border border-ember-400/25 bg-ember-400/10 p-4">
           <FiClock size={18} className="mt-0.5 shrink-0 text-ember-500" />
           <div>
             <p className="text-sm font-semibold text-ink">

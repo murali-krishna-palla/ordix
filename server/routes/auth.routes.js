@@ -14,6 +14,7 @@ const {
 
 const validate = require("../middleware/validation.middleware");
 const authenticate = require("../middleware/authenticate");
+const authorize = require("../middleware/authorize");
 
 // ==============================
 // Test Route
@@ -52,7 +53,10 @@ router.post(
   "/super-admin/login",
   loginValidator,
   validate,
-  authController.login
+  (req, res, next) => {
+    req.isSuperAdmin = true;
+    authController.login(req, res, next);
+  }
 );
 
 // ==============================
@@ -91,6 +95,7 @@ router.get(
 router.get(
   "/super-admin/me",
   authenticate,
+  authorize("SUPER_ADMIN"),
   authController.getMe
 );
 
@@ -115,6 +120,7 @@ router.post(
 router.post(
   "/super-admin/logout",
   authenticate,
+  authorize("SUPER_ADMIN"),
   authController.logout
 );
 

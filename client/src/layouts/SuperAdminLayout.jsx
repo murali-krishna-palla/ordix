@@ -1,7 +1,7 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FiGrid, FiClipboard, FiLogOut, FiMenu, FiShield } from "react-icons/fi";
+import { FiGrid, FiClipboard, FiLogOut, FiMenu, FiX, FiShield } from "react-icons/fi";
 
 import Logo from "../components/common/Logo";
 import useSuperAdminAuth from "../hooks/useSuperAdminAuth";
@@ -16,10 +16,10 @@ const NAV_ITEMS = [
 ];
 
 const navLinkClass = ({ isActive }) =>
-  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+  `group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
     isActive
       ? "bg-brand-50 text-brand-700"
-      : "text-ink-soft hover:bg-canvas hover:text-ink"
+      : "text-ink-soft hover:bg-canvas-alt hover:text-ink"
   }`;
 
 // Kept independent from DashboardLayout.jsx (restaurant admins) per the
@@ -46,17 +46,29 @@ const SuperAdminLayout = () => {
       </div>
 
       <nav className="mt-8 flex-1 space-y-1">
+        <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-faint">
+          Console
+        </p>
         {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
           <NavLink key={to} to={to} end={end} className={navLinkClass}>
-            <Icon size={17} />
-            {label}
+            {({ isActive }) => (
+              <>
+                <span
+                  className={`absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-brand-600 transition-opacity ${
+                    isActive ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+                <Icon size={17} />
+                {label}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
 
       <button
         onClick={handleLogout}
-        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft transition hover:bg-canvas hover:text-danger"
+        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft transition hover:bg-danger-soft hover:text-danger"
       >
         <FiLogOut size={17} />
         Log out
@@ -75,18 +87,25 @@ const SuperAdminLayout = () => {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div
-            className="absolute inset-0 bg-ink/40"
+            className="absolute inset-0 bg-ink/40 backdrop-blur-[1px]"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="absolute inset-y-0 left-0 flex w-64 flex-col bg-surface px-4 py-6 shadow-xl">
+          <aside className="animate-fade-in absolute inset-y-0 left-0 flex w-64 flex-col bg-surface px-4 py-6 shadow-xl">
+            <button
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close menu"
+              className="absolute right-3 top-3 rounded-lg p-1.5 text-muted hover:bg-canvas-alt hover:text-ink"
+            >
+              <FiX size={18} />
+            </button>
             {SidebarContent}
           </aside>
         </div>
       )}
 
-      <div className="flex-1">
+      <div className="min-w-0 flex-1">
         {/* Topbar */}
-        <header className="flex items-center justify-between border-b border-line bg-surface px-5 py-3.5 lg:px-8">
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-surface/90 px-5 py-3.5 backdrop-blur lg:px-8">
           <button
             className="text-ink-soft lg:hidden"
             onClick={() => setMobileOpen(true)}
@@ -103,7 +122,7 @@ const SuperAdminLayout = () => {
           </div>
 
           <div className="flex items-center gap-2 text-sm font-medium text-ink">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink text-xs font-semibold text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-ink to-brand-900 text-xs font-semibold text-white">
               {admin?.name?.[0]?.toUpperCase() || "A"}
             </span>
             <span className="hidden sm:inline">{admin?.name || "Super Admin"}</span>

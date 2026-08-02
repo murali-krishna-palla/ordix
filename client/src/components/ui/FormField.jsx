@@ -1,9 +1,9 @@
 import { forwardRef, useState } from "react";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiAlertCircle } from "react-icons/fi";
 import clsx from "clsx";
 
 const FormField = forwardRef(
-  ({ label, error, type = "text", className, ...props }, ref) => {
+  ({ label, error, type = "text", className, hint, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = type === "password";
     const inputType = isPassword && showPassword ? "text" : type;
@@ -23,7 +23,9 @@ const FormField = forwardRef(
             className={clsx(
               "w-full rounded-lg border bg-surface px-3.5 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-muted/70",
               "focus:border-brand-500 focus:ring-4 focus:ring-brand-100",
-              error ? "border-danger/60" : "border-line",
+              error
+                ? "border-danger/60 focus:border-danger focus:ring-danger-soft"
+                : "border-line hover:border-faint",
               isPassword && "pr-10",
               className
             )}
@@ -43,7 +45,14 @@ const FormField = forwardRef(
           )}
         </span>
 
-        {error && <span className="mt-1 block text-xs text-danger">{error}</span>}
+        {error ? (
+          <span className="mt-1.5 flex items-center gap-1 text-xs font-medium text-danger">
+            <FiAlertCircle size={12} />
+            {error}
+          </span>
+        ) : (
+          hint && <span className="mt-1.5 block text-xs text-muted">{hint}</span>
+        )}
       </label>
     );
   }

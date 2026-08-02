@@ -13,6 +13,20 @@ const registerRequestValidator = [
     .notEmpty()
     .withMessage("Owner name is required."),
 
+  body("restaurantEmail")
+    .trim()
+    .notEmpty()
+    .withMessage("Restaurant email is required.")
+    .isEmail()
+    .withMessage("Please provide a valid restaurant email address."),
+
+  body("restaurantPhone")
+    .trim()
+    .notEmpty()
+    .withMessage("Restaurant phone number is required.")
+    .isLength({ min: 10, max: 15 })
+    .withMessage("Restaurant phone number must be between 10 and 15 digits."),
+
   body("email")
     .trim()
     .notEmpty()

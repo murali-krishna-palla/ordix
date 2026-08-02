@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { FiUploadCloud, FiImage, FiEdit2 } from "react-icons/fi";
+import { FiUploadCloud, FiImage, FiEdit2, FiSquare } from "react-icons/fi";
 import toast from "react-hot-toast";
 import clsx from "clsx";
 
@@ -45,8 +45,13 @@ const UploadCard = ({
 
   return (
     <div>
-      <h2 className="font-display text-base font-semibold text-ink">{title}</h2>
-      <p className="mt-0.5 text-sm text-muted">{hint}</p>
+      <div className="flex items-center gap-2.5">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+          {shape === "square" ? <FiSquare size={15} /> : <FiImage size={15} />}
+        </span>
+        <h2 className="font-display text-base font-semibold text-ink">{title}</h2>
+      </div>
+      <p className="mt-0.5 pl-[42px] text-sm text-muted">{hint}</p>
 
       <button
         type="button"
@@ -54,7 +59,7 @@ const UploadCard = ({
         disabled={uploading}
         className={clsx(
           "group relative mt-4 block overflow-hidden rounded-xl border bg-canvas text-left transition disabled:cursor-wait",
-          shape === "square" ? "aspect-square w-32" : "aspect-[3/1] w-full",
+          shape === "square" ? "aspect-square w-32 shadow-sm" : "aspect-[3/1] w-full shadow-sm",
           hasImage ? "border-line" : "border-2 border-dashed border-line hover:border-brand-300 hover:bg-brand-50/40"
         )}
       >
@@ -147,7 +152,7 @@ const BrandingTab = ({ restaurant, onSaved }) => {
         onUpload={handleLogoUpload}
       />
 
-      <div className="border-t border-line pt-8">
+      <div className="border-t border-line-soft pt-8">
         <UploadCard
           title="Banner"
           hint="The wide cover image at the top of your Hotel Overview page."

@@ -38,7 +38,7 @@ const register = async (req, res, next) => {
 // ==============================
 const login = async (req, res, next) => {
   try {
-    const result = await authService.login(req.body);
+    const result = await authService.login(req.body, req.isSuperAdmin);
 
     res.status(200).json({
       success: true,

@@ -4,6 +4,27 @@ const getRestaurantById = async (restaurantId) => {
   return await Restaurant.findByPk(restaurantId);
 };
 
+const getAllRestaurants = async (status) => {
+  const where = {};
+
+  if (status) {
+    where.status = status;
+  }
+
+  return await Restaurant.findAll({
+    where,
+    order: [["createdAt", "DESC"]],
+  });
+};
+
+const deleteRestaurant = async (restaurantId) => {
+  const restaurant = await Restaurant.findByPk(restaurantId);
+  if (!restaurant) return null;
+
+  await restaurant.destroy({ force: true });
+  return restaurant;
+};
+
 const updateRestaurant = async (restaurantId, updateData) => {
   const restaurant = await Restaurant.findByPk(restaurantId);
 
@@ -40,6 +61,8 @@ const updateBanner = async (restaurantId, bannerPath) => {
 
 module.exports = {
   getRestaurantById,
+  getAllRestaurants,
+  deleteRestaurant,
   updateRestaurant,
   updateLogo,
   updateBanner,

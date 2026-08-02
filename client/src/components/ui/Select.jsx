@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiAlertCircle } from "react-icons/fi";
 import clsx from "clsx";
 
 const Select = forwardRef(
@@ -18,7 +18,9 @@ const Select = forwardRef(
             className={clsx(
               "w-full appearance-none rounded-lg border bg-surface px-3.5 py-2.5 pr-9 text-[15px] text-ink outline-none transition",
               "focus:border-brand-500 focus:ring-4 focus:ring-brand-100",
-              error ? "border-danger/60" : "border-line",
+              error
+                ? "border-danger/60 focus:border-danger focus:ring-danger-soft"
+                : "border-line hover:border-faint",
               className
             )}
             {...props}
@@ -31,7 +33,12 @@ const Select = forwardRef(
           />
         </span>
 
-        {error && <span className="mt-1 block text-xs text-danger">{error}</span>}
+        {error && (
+          <span className="mt-1.5 flex items-center gap-1 text-xs font-medium text-danger">
+            <FiAlertCircle size={12} />
+            {error}
+          </span>
+        )}
       </label>
     );
   }

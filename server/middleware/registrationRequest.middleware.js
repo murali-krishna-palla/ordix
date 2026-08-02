@@ -6,6 +6,10 @@ const normalizeRegistrationRequest = (req, res, next) => {
     req.body.ownerName =
       req.body.ownerName ||
       [owner.firstName, owner.lastName].filter(Boolean).join(" ").trim();
+    req.body.restaurantEmail =
+      req.body.restaurantEmail || restaurant.email;
+    req.body.restaurantPhone =
+      req.body.restaurantPhone || restaurant.phone;
     req.body.email = req.body.email || owner.email;
     req.body.phone = req.body.phone || owner.phone;
     req.body.password = req.body.password || owner.password;

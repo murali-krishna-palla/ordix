@@ -20,9 +20,11 @@ import { getAmenityIcon } from "../../utils/amenityIcons";
 import Button from "../../components/ui/Button";
 
 const InfoCard = ({ icon: Icon, label, value, href }) => (
-  <div className="rounded-xl border border-line bg-surface p-5">
+  <div className="card card-hover p-5">
     <div className="flex items-center gap-2 text-sm font-medium text-muted">
-      <Icon size={15} />
+      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-canvas-alt text-brand-600">
+        <Icon size={14} />
+      </span>
       {label}
     </div>
     {href ? (
@@ -30,18 +32,18 @@ const InfoCard = ({ icon: Icon, label, value, href }) => (
         href={href}
         target="_blank"
         rel="noreferrer"
-        className="mt-2 block break-words text-[15px] font-semibold text-brand-600 hover:underline"
+        className="mt-2.5 block break-words text-[15px] font-semibold text-brand-600 hover:underline"
       >
         {value}
       </a>
     ) : (
-      <p className="mt-2 break-words text-[15px] font-semibold text-ink">{value}</p>
+      <p className="mt-2.5 break-words text-[15px] font-semibold text-ink">{value}</p>
     )}
   </div>
 );
 
 const EmptyNote = ({ children }) => (
-  <div className="rounded-xl border border-dashed border-line bg-canvas px-5 py-6 text-center text-sm text-muted">
+  <div className="rounded-xl border border-dashed border-line bg-canvas-alt px-5 py-6 text-center text-sm text-muted">
     {children}
   </div>
 );
@@ -76,7 +78,7 @@ const HotelOverview = () => {
 
   if (!restaurant) {
     return (
-      <div className="rounded-xl border border-dashed border-line bg-surface p-10 text-center">
+      <div className="card p-10 text-center">
         <p className="font-display text-lg font-semibold text-ink">
           Couldn't load your hotel
         </p>
@@ -102,11 +104,11 @@ const HotelOverview = () => {
     <div>
       {/* Hero: banner with overlapping logo */}
       <div className="relative">
-        <div className="aspect-[3/1] w-full overflow-hidden rounded-2xl border border-line bg-canvas sm:aspect-[4/1]">
+        <div className="aspect-[3/1] w-full overflow-hidden rounded-2xl border border-line bg-canvas shadow-sm sm:aspect-[4/1]">
           {bannerUrl ? (
             <img src={bannerUrl} alt="" className="h-full w-full object-cover" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-50 to-canvas text-muted">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-50 via-canvas-alt to-canvas text-muted">
               <FiImage size={26} />
             </div>
           )}
@@ -120,7 +122,7 @@ const HotelOverview = () => {
               className="h-16 w-16 rounded-2xl border-4 border-surface bg-surface object-cover shadow-md sm:h-20 sm:w-20"
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-surface bg-ink text-lg font-bold text-white shadow-md sm:h-20 sm:w-20">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-surface bg-gradient-to-br from-ink to-brand-900 text-lg font-bold text-white shadow-md sm:h-20 sm:w-20">
               {initials}
             </div>
           )}
@@ -191,7 +193,7 @@ const HotelOverview = () => {
               return (
                 <span
                   key={amenity}
-                  className="flex items-center gap-2 rounded-full border border-line bg-canvas px-4 py-2 text-sm font-medium text-ink-soft"
+                  className="flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink-soft shadow-sm"
                 >
                   <Icon size={15} className="text-brand-600" />
                   {amenity}
@@ -214,7 +216,7 @@ const HotelOverview = () => {
             {restaurant.policies.map((policy, i) => (
               <li
                 key={i}
-                className="flex items-start gap-2.5 rounded-xl border border-line bg-surface p-4 text-sm text-ink-soft"
+                className="card flex items-start gap-2.5 p-4 text-sm text-ink-soft"
               >
                 <FiInfo size={15} className="mt-0.5 shrink-0 text-brand-600" />
                 {policy}

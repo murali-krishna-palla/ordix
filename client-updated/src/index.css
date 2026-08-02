@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #14111c;
+  --color-ink-soft: #4a4557;
+  --color-muted: #837c92;
+  --color-line: #e7e3ef;
+  --color-surface: #ffffff;
+  --color-canvas: #faf9fc;
+
+  --color-brand-50: #f5eeff;
+  --color-brand-100: #ead9ff;
+  --color-brand-200: #d6b4ff;
+  --color-brand-400: #a855f7;
+  --color-brand-500: #8b2fe0;
+  --color-brand-600: #7318c2;
+  --color-brand-700: #5a129a;
+
+  --color-ember-400: #fb923c;
+  --color-ember-500: #f2740c;
+
+  --color-success: #17915a;
+  --color-danger: #d92d3b;
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Receipt-style perforated divider — nods to a kitchen order ticket */
+.ticket-edge {
+  position: relative;
+}
+
+.ticket-edge::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 1px;
+  background-image: linear-gradient(to right, var(--color-brand-200) 50%, transparent 0%);
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+}
+
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-ink);
+}

@@ -60,6 +60,8 @@ class RegistrationRequestService {
 
     const request = await registrationRequestRepository.createRequest({
       restaurantName,
+      restaurantEmail,
+      restaurantPhone,
       ownerName,
       email,
       phone,
@@ -152,8 +154,8 @@ class RegistrationRequestService {
       const createdRestaurant = await Restaurant.create(
         {
           name: request.restaurantName,
-          email: request.email,
-          phone: request.phone,
+          email: request.restaurantEmail || request.email,
+          phone: request.restaurantPhone || request.phone,
           address: request.address,
           city: request.city,
           state: request.state,

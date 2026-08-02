@@ -45,7 +45,7 @@ const Settings = () => {
 
   if (!restaurant) {
     return (
-      <div className="rounded-xl border border-dashed border-line bg-surface p-10 text-center">
+      <div className="card p-10 text-center">
         <p className="font-display text-lg font-semibold text-ink">
           Couldn't load your restaurant
         </p>
@@ -65,19 +65,24 @@ const Settings = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[200px_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr]">
         {/* Tab nav */}
         <nav className="flex gap-1.5 overflow-x-auto lg:flex-col lg:gap-1">
           {TABS.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
-              className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+              className={`relative flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
                 tab === key
                   ? "bg-brand-50 text-brand-700"
-                  : "text-ink-soft hover:bg-canvas hover:text-ink"
+                  : "text-ink-soft hover:bg-canvas-alt hover:text-ink"
               }`}
             >
+              <span
+                className={`absolute left-0 top-1/2 hidden h-5 w-1 -translate-y-1/2 rounded-r-full bg-brand-600 transition-opacity lg:block ${
+                  tab === key ? "opacity-100" : "opacity-0"
+                }`}
+              />
               <Icon size={16} />
               {label}
             </button>
@@ -85,7 +90,7 @@ const Settings = () => {
         </nav>
 
         {/* Active tab panel */}
-        <div className="rounded-xl border border-line bg-surface p-6">
+        <div className="card p-6">
           {tab === "profile" && (
             <ProfileTab restaurant={restaurant} onSaved={setRestaurant} />
           )}

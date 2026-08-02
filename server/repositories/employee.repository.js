@@ -115,6 +115,11 @@ class EmployeeRepository {
                 {
                     model: Role,
                     as: "roles",
+                    where: {
+                        name: {
+                            [Op.ne]: "RESTAURANT_ADMIN",
+                        },
+                    },
                     through: {
                         attributes: [],
                     },

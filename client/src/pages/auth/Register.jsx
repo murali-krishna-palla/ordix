@@ -108,8 +108,8 @@ const Register = () => {
                 i < step
                   ? "bg-brand-600 text-white"
                   : i === step
-                  ? "bg-ink text-white"
-                  : "bg-canvas text-muted border border-line"
+                  ? "bg-ink text-white shadow-sm"
+                  : "bg-canvas-alt text-muted border border-line"
               }`}
             >
               {i < step ? <FiCheck size={14} /> : i + 1}

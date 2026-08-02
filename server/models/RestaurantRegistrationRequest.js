@@ -29,6 +29,24 @@ const RestaurantRegistrationRequest = sequelize.define(
       },
     },
 
+    restaurantEmail: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: "restaurant_email",
+      validate: {
+        isEmail: true,
+      },
+    },
+
+    restaurantPhone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: "restaurant_phone",
+      validate: {
+        len: [10, 15],
+      },
+    },
+
     email: {
       type: DataTypes.STRING,
       allowNull: false,

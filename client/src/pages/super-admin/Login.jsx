@@ -44,8 +44,16 @@ const SuperAdminLogin = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-canvas px-6 py-12">
-      <div className="w-full max-w-sm rounded-2xl border border-line bg-surface p-8 shadow-sm">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-6 py-12">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.5]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, var(--color-brand-100) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
+        }}
+      />
+      <div className="animate-fade-in relative w-full max-w-sm rounded-2xl border border-line bg-surface p-8 shadow-[var(--shadow-card-hover)]">
         <div className="flex flex-col items-center text-center">
           <Logo />
           <span className="mt-3 flex items-center gap-1.5 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-white">

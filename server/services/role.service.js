@@ -69,6 +69,18 @@ class RoleService {
       transaction,
     });
   }
+
+  // ==============================
+  // Get Roles
+  // ==============================
+  async getRoles(restaurantId) {
+    return await Role.findAll({
+      where: {
+        restaurantId,
+      },
+      order: [["createdAt", "ASC"]],
+    });
+  }
 }
 
 module.exports = new RoleService();

@@ -11,7 +11,7 @@ const AuthLayout = () => {
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
       {/* Branding panel */}
-      <aside className="relative hidden flex-col justify-between overflow-hidden bg-ink px-12 py-10 text-white lg:flex">
+      <aside className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-ink via-ink to-brand-900 px-12 py-10 text-white lg:flex">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
@@ -20,6 +20,8 @@ const AuthLayout = () => {
             backgroundSize: "22px 22px",
           }}
         />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-500/30 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-brand-400/20 blur-3xl" />
 
         <Logo mark="light" className="relative z-10" />
 

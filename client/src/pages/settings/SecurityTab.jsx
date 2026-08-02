@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
+import { FiLock } from "react-icons/fi";
 import FormField from "../../components/ui/FormField";
 import Button from "../../components/ui/Button";
 import authService from "../../services/auth.service";
@@ -29,10 +30,15 @@ const SecurityTab = () => {
 
   return (
     <div className="max-w-sm">
-      <h2 className="font-display text-base font-semibold text-ink">
-        Change password
-      </h2>
-      <p className="mt-0.5 text-sm text-muted">
+      <div className="flex items-center gap-2.5">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+          <FiLock size={15} />
+        </span>
+        <h2 className="font-display text-base font-semibold text-ink">
+          Change password
+        </h2>
+      </div>
+      <p className="mt-0.5 pl-[42px] text-sm text-muted">
         Use a password you're not using anywhere else.
       </p>
 

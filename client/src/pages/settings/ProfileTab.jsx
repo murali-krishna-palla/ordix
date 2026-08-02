@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
+import { FiUser, FiMapPin, FiFileText } from "react-icons/fi";
 import FormField from "../../components/ui/FormField";
 import Textarea from "../../components/ui/Textarea";
 import Button from "../../components/ui/Button";
@@ -47,10 +48,15 @@ const ProfileTab = ({ restaurant, onSaved }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <section>
-        <h2 className="font-display text-base font-semibold text-ink">
-          Basic information
-        </h2>
-        <p className="mt-0.5 text-sm text-muted">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+            <FiUser size={15} />
+          </span>
+          <h2 className="font-display text-base font-semibold text-ink">
+            Basic information
+          </h2>
+        </div>
+        <p className="mt-0.5 pl-[42px] text-sm text-muted">
           How your restaurant appears across ORDIX.
         </p>
 
@@ -89,11 +95,16 @@ const ProfileTab = ({ restaurant, onSaved }) => {
         </div>
       </section>
 
-      <section>
-        <h2 className="font-display text-base font-semibold text-ink">
-          Address
-        </h2>
-        <p className="mt-0.5 text-sm text-muted">Where guests can find you.</p>
+      <section className="border-t border-line-soft pt-8">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+            <FiMapPin size={15} />
+          </span>
+          <h2 className="font-display text-base font-semibold text-ink">
+            Address
+          </h2>
+        </div>
+        <p className="mt-0.5 pl-[42px] text-sm text-muted">Where guests can find you.</p>
 
         <div className="mt-4 space-y-4">
           <FormField
@@ -118,11 +129,16 @@ const ProfileTab = ({ restaurant, onSaved }) => {
         </div>
       </section>
 
-      <section>
-        <h2 className="font-display text-base font-semibold text-ink">
-          Legal &amp; social
-        </h2>
-        <p className="mt-0.5 text-sm text-muted">
+      <section className="border-t border-line-soft pt-8">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+            <FiFileText size={15} />
+          </span>
+          <h2 className="font-display text-base font-semibold text-ink">
+            Legal &amp; social
+          </h2>
+        </div>
+        <p className="mt-0.5 pl-[42px] text-sm text-muted">
           Optional — shown on invoices and your public page.
         </p>
 
@@ -158,7 +174,7 @@ const ProfileTab = ({ restaurant, onSaved }) => {
         </div>
       </section>
 
-      <div className="flex justify-end border-t border-line pt-5">
+      <div className="flex justify-end border-t border-line-soft pt-5">
         <Button type="submit" loading={isSubmitting} disabled={!isDirty} className="w-auto px-6">
           Save changes
         </Button>
